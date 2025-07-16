@@ -1,0 +1,8 @@
+# ide
+.idea
+.vscode
+.github
+
+# 构建目录
+build
+cmake-build-debug-esp32s3
