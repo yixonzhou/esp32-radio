@@ -9,10 +9,6 @@
 
 #include "iic.h"
 
-#include <soc/gpio_num.h>
-#include <driver/i2c_types.h>
-#include <driver/i2c_master.h>
-
 typedef struct IicGpioPort
 {
     int sda;
@@ -30,8 +26,12 @@ const IicGpioPort IIC_GPIO_PORT[] = {
     },
 };
 
-i2c_master_bus_handle_t iic_init_master(i2c_port_t iic_port)
+i2c_master_bus_handle_t i2c_master_bus_handles[I2C_NUM_MAX];
+
+i2c_master_bus_handle_t iic_init_master_bus(i2c_port_t iic_port)
 {
+    // todo 防止重复初始化
+    // 初始化总线
     i2c_master_bus_config_t bus_config = {
         .i2c_port = iic_port,
         .sda_io_num = IIC_GPIO_PORT[iic_port].sda,
@@ -45,8 +45,7 @@ i2c_master_bus_handle_t iic_init_master(i2c_port_t iic_port)
             0,
         },
     };
-
-    i2c_device_config_t dev_config = {
-        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
-    };
+    auto ret = i2c_new_master_bus(&bus_config, &i2c_master_bus_handles[iic_port]);
+    ESP_ERROR_CHECK(ret);
+    return i2c_master_bus_handles[iic_port];
 }
