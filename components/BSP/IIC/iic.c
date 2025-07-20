@@ -9,8 +9,7 @@
 
 #include "iic.h"
 
-typedef struct IicGpioPort
-{
+typedef struct IicGpioPort {
     int sda;
     int scl;
 } IicGpioPort;
@@ -28,23 +27,21 @@ const IicGpioPort IIC_GPIO_PORT[] = {
 
 i2c_master_bus_handle_t i2c_master_bus_handles[I2C_NUM_MAX];
 
-i2c_master_bus_handle_t iic_init_master_bus(i2c_port_t iic_port)
-{
+i2c_master_bus_handle_t iic_init_master_bus(i2c_port_t iic_port) {
     // todo 防止重复初始化
     // 初始化总线
     i2c_master_bus_config_t bus_config = {
         .i2c_port = iic_port,
         .sda_io_num = IIC_GPIO_PORT[iic_port].sda,
         .scl_io_num = IIC_GPIO_PORT[iic_port].scl,
-        .clk_source = I2C_CLK_SRC_XTAL,
+        .clk_source = I2C_CLK_SRC_DEFAULT,
         .glitch_ignore_cnt = 7, // 通常为7
         .intr_priority = 3,
         .trans_queue_depth = 0,
-        .flags = {
-            0,
-            0,
-        },
+        .flags.enable_internal_pullup = true,
+        .flags.allow_pd = false,
     };
+
     auto ret = i2c_new_master_bus(&bus_config, &i2c_master_bus_handles[iic_port]);
     ESP_ERROR_CHECK(ret);
     return i2c_master_bus_handles[iic_port];

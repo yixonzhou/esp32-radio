@@ -10,12 +10,12 @@ void app_main(void) {
     float frequency;
 
     tea5767_basic_get_frequency(&frequency);
-    printf("current frequency: %f", frequency);
+    printf("current frequency: %f\n", frequency);
 
     tea5767_basic_search_up();
 
     tea5767_basic_get_frequency(&frequency);
-    printf("current frequency: %f", frequency);
+    printf("current frequency: %f\n", frequency);
 
 
     while (1) {
