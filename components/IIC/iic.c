@@ -34,7 +34,7 @@ i2c_master_bus_handle_t iic_init_master_bus(i2c_port_t iic_port) {
         .i2c_port = iic_port,
         .sda_io_num = IIC_GPIO_PORT[iic_port].sda,
         .scl_io_num = IIC_GPIO_PORT[iic_port].scl,
-        .clk_source = I2C_CLK_SRC_DEFAULT,
+        .clk_source = I2C_CLK_SRC_XTAL,
         .glitch_ignore_cnt = 7, // 通常为7
         .intr_priority = 3,
         .trans_queue_depth = 0,
